@@ -10,8 +10,6 @@ import CoreData
 
 struct VideoGameListView: View {
     @StateObject private var viewModel: VideoGameViewModel
-    @State private var selectedCategory: String?
-    @State private var selectedPlatform: String?
     @State private var carouselIndex = 0
     
     init(context: NSManagedObjectContext) {
@@ -24,16 +22,16 @@ struct VideoGameListView: View {
                 Text("Destacados y recomendados")
                     .frame(maxWidth: .infinity,  alignment: .leading)
                     .font(.system(size: 20, weight: .bold))
-                    
+                
                 TabView(selection: $carouselIndex) {
                     ForEach(viewModel.videoGames.prefix(5).indices, id: \..self) { index in
                         if let game = viewModel.videoGames[safe: index] {
                             AsyncImage(url: URL(string: game.thumbnail)) { image in
                                 image.resizable()
-                                     .scaledToFill()
-                                     .frame(width: UIScreen.main.bounds.width - 30, height: 200)
-                                     
-                                     .clipped()
+                                    .scaledToFill()
+                                    .frame(width: UIScreen.main.bounds.width - 30, height: 200)
+                                
+                                    .clipped()
                             } placeholder: {
                                 ProgressView()
                             }
@@ -64,19 +62,40 @@ struct VideoGameListView: View {
                     }
                 }
                 
+                
                 Text("Explora tu categoria")
                     .frame(maxWidth: .infinity,  alignment: .leading)
                     .font(.system(size: 20, weight: .bold))
                     .padding(.top, 15)
                 
-                CategoryGridView(categories: viewModel.uniqueCategories)
+                
+                
+                if viewModel.filteredGamesByCategory.isEmpty {
+                    CategoryGridView(viewModel: viewModel, categories: viewModel.uniqueCategories)
+                } else {
+                    CategoryTagView(genre: viewModel.selectedCategory!, onRemove: viewModel.handleRemoveCategorySelection)
+                    
+                    ForEach(viewModel.filteredGamesByCategory, id: \.id) { game in
+                        BannerView(image: game.thumbnail, title: game.title, category: game.genre, description: game.shortDescription)
+                    }
+                }
+                
                 
                 Text("Explora tu plataforma")
                     .frame(maxWidth: .infinity,  alignment: .leading)
                     .font(.system(size: 20, weight: .bold))
                     .padding(.top, 15)
                 
-                CategoryGridView(categories: viewModel.uniquePlatforms)
+                
+                if viewModel.filteredGamesByPlatform.isEmpty {
+                    PlatformGridView(viewModel: viewModel, platforms: viewModel.uniquePlatforms)
+                } else {
+                    PlatformTagView(platform: viewModel.selectedPlatform!, onRemove: viewModel.handleRemovePlatformSelection)
+                    
+                    ForEach(viewModel.filteredGamesByPlatform, id: \.id) { game in
+                        BannerView(image: game.thumbnail, title: game.title, category: game.genre, description: game.shortDescription)
+                    }
+                }
                 
                 
             }

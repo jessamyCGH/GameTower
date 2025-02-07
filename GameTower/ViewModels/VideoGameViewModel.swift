@@ -14,18 +14,22 @@ class VideoGameViewModel: ObservableObject {
     @Published var searchText = ""
     @Published var uniqueCategories: [String] = []
     @Published var uniquePlatforms: [String] = []
+    @Published var selectedCategory: String?
+    @Published var selectedPlatform: String?
+    @Published var filteredGamesByCategory: [VideoGame] = []
+    @Published var filteredGamesByPlatform: [VideoGame] = []
     
     
     private let context: NSManagedObjectContext
     private let service: VideoGameServiceProtocol
     private var cancellables = Set<AnyCancellable>()
-
+    
     init(service: VideoGameServiceProtocol = VideoGameService(), context: NSManagedObjectContext) {
         self.service = service
         self.context = context
         fetchVideoGames()
     }
-
+    
     func fetchVideoGames() {
         service.fetchGames()
             .receive(on: DispatchQueue.main)
@@ -38,13 +42,37 @@ class VideoGameViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] games in
                 self?.videoGames = games
+                print("games \(self!.videoGames.count)")
                 self?.saveGamesToCoreData(games)
                 self?.uniqueCategories = Array(Set(games.map { $0.genre })).sorted()
                 self?.uniquePlatforms = Array(Set(games.map { $0.platform })).sorted()
             })
             .store(in: &cancellables)
     }
-
+    
+    func handleCategorySelection(_ category: String) {
+        selectedCategory = category
+        filteredGamesByCategory = videoGames.filter({
+            $0.genre == selectedCategory
+        })
+    }
+    
+    func handlePlatformSelection(_ platform: String) {
+        selectedPlatform = platform
+        filteredGamesByPlatform = videoGames.filter({
+            $0.platform == selectedPlatform
+        })
+    }
+    
+    func handleRemoveCategorySelection(){
+        selectedCategory = ""
+        filteredGamesByCategory = []
+    }
+    func handleRemovePlatformSelection(){
+        selectedPlatform = ""
+        filteredGamesByPlatform = []
+    }
+    
     private func saveGamesToCoreData(_ games: [VideoGame]) {
         for game in games {
             let entity = NSEntityDescription.entity(forEntityName: "VideoGameEntity", in: context)!
@@ -61,7 +89,7 @@ class VideoGameViewModel: ObservableObject {
             videoGame.setValue(game.developer, forKey: "developer")
             videoGame.setValue(game.freetogameProfileUrl, forKey: "freetogameprofileurl")
         }
-
+        
         do {
             try context.save()
         } catch {

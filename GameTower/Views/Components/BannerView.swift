@@ -12,7 +12,7 @@ struct BannerView: View {
     var title: String
     var category: String
     var description: String
-
+    
     var body: some View {
         HStack(spacing: 15) {
             AsyncImage(url: URL(string: image)) { image in
@@ -24,22 +24,22 @@ struct BannerView: View {
                 ProgressView()
                     .frame(width: 100, height: 80)
             }
-
+            
             VStack(alignment: .leading, spacing: 5) {
                 Text(title)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.black)
-
+                
                 Text("Categoría: \(category)")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.gray)
-
+                
                 Text(description)
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
                     .lineLimit(3)
             }
-
+            
             Spacer()
         }
         .padding(10)
