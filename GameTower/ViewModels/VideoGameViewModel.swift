@@ -12,7 +12,10 @@ import Combine
 class VideoGameViewModel: ObservableObject {
     @Published var videoGames: [VideoGame] = []
     @Published var searchText = ""
-
+    @Published var uniqueCategories: [String] = []
+    @Published var uniquePlatforms: [String] = []
+    
+    
     private let context: NSManagedObjectContext
     private let service: VideoGameServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -36,6 +39,8 @@ class VideoGameViewModel: ObservableObject {
             }, receiveValue: { [weak self] games in
                 self?.videoGames = games
                 self?.saveGamesToCoreData(games)
+                self?.uniqueCategories = Array(Set(games.map { $0.genre })).sorted()
+                self?.uniquePlatforms = Array(Set(games.map { $0.platform })).sorted()
             })
             .store(in: &cancellables)
     }
@@ -51,6 +56,10 @@ class VideoGameViewModel: ObservableObject {
             videoGame.setValue(game.thumbnail, forKey: "thumbnail")
             videoGame.setValue(game.gameURL, forKey: "gameurl")
             videoGame.setValue(game.releaseDate, forKey: "releasedate")
+            videoGame.setValue(game.platform, forKey: "platform")
+            videoGame.setValue(game.publisher, forKey: "publisher")
+            videoGame.setValue(game.developer, forKey: "developer")
+            videoGame.setValue(game.freetogameProfileUrl, forKey: "freetogameprofileurl")
         }
 
         do {

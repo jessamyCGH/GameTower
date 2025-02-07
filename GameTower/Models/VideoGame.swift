@@ -15,6 +15,10 @@ struct VideoGame: Identifiable, Codable {
     let thumbnail: String
     let gameURL: String
     let releaseDate: String
+    let platform: String
+    let publisher: String
+    let developer: String
+    let freetogameProfileUrl: String
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -24,5 +28,9 @@ struct VideoGame: Identifiable, Codable {
         case thumbnail
         case gameURL = "game_url"
         case releaseDate = "release_date"
+        case platform
+        case publisher
+        case developer
+        case freetogameProfileUrl = "freetogame_profile_url"
     }
 }
