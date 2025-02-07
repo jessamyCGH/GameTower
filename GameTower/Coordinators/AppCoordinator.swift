@@ -6,4 +6,10 @@
 //
 
 
+import SwiftUI
 
+class AppCoordinator: ObservableObject {
+    @Published var rootView: AnyView = AnyView(VideoGameListView())
+
+    
+}
