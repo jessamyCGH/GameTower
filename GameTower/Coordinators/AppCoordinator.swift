@@ -7,9 +7,17 @@
 
 
 import SwiftUI
+import CoreData
 
 class AppCoordinator: ObservableObject {
-    @Published var rootView: AnyView = AnyView(VideoGameListView())
+    @Published var rootView: AnyView
 
-    
+    private let context: NSManagedObjectContext
+
+    init(context: NSManagedObjectContext) {
+        self.context = context
+        rootView = AnyView(VideoGameListView(context: context))
+    }
+
+   
 }

@@ -9,11 +9,12 @@ import SwiftUI
 
 @main
 struct GameTowerApp: App {
-    @StateObject private var coordinator = AppCoordinator()
+    @StateObject private var coordinator = AppCoordinator(context: PersistenceController.shared.container.viewContext)
 
     var body: some Scene {
         WindowGroup {
             coordinator.rootView
+                .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
         }
     }
 }

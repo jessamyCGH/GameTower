@@ -6,13 +6,21 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct VideoGameListView: View {
-    @StateObject private var viewModel = VideoGameViewModel()
+    @StateObject private var viewModel: VideoGameViewModel
 
+    init(context: NSManagedObjectContext) {
+        
+        _viewModel = StateObject(wrappedValue: VideoGameViewModel(context: context))
+  
+    }
     var body: some View {
         NavigationView {
-            List(viewModel.videoGames) { game in}
+            List(viewModel.videoGames) { game in
+                
+            }
             .navigationTitle("Videojuegos")
         }
         .onAppear {
