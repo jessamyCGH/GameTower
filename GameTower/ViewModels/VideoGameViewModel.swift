@@ -21,6 +21,7 @@ class VideoGameViewModel: ObservableObject {
     
     
     
+    
     private let context: NSManagedObjectContext
     private let service: VideoGameServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -43,7 +44,6 @@ class VideoGameViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] games in
                 self?.videoGames = games
-                print("games \(self!.videoGames.count)")
                 self?.saveGamesToCoreData(games)
                 self?.uniqueCategories = Array(Set(games.map { $0.genre })).sorted()
                 self?.uniquePlatforms = Array(Set(games.map { $0.platform })).sorted()
@@ -69,9 +69,15 @@ class VideoGameViewModel: ObservableObject {
         selectedCategory = ""
         filteredGamesByCategory = []
     }
+    
     func handleRemovePlatformSelection(){
         selectedPlatform = ""
         filteredGamesByPlatform = []
+    }
+    
+    func handleGameTap(game: VideoGame, coordinator: AppCoordinator) {
+        coordinator.showVideoGameDetailView(game: game)
+        
     }
     
     private func saveGamesToCoreData(_ games: [VideoGame]) {

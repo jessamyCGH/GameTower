@@ -8,14 +8,12 @@
 import SwiftUI
 
 struct BannerView: View {
-    var image: String
-    var title: String
-    var category: String
-    var description: String
+    var game: VideoGame
+    var onTapGame: (_ game: VideoGame) -> Void
     
     var body: some View {
         HStack(spacing: 15) {
-            AsyncImage(url: URL(string: image)) { image in
+            AsyncImage(url: URL(string: game.thumbnail)) { image in
                 image.resizable()
                     .scaledToFill()
                     .frame(width: 100, height: 80)
@@ -26,15 +24,15 @@ struct BannerView: View {
             }
             
             VStack(alignment: .leading, spacing: 5) {
-                Text(title)
+                Text(game.title)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.black)
                 
-                Text("Categoría: \(category)")
+                Text("Categoría: \(game.genre)")
                     .font(.system(size: 14, weight: .semibold))
                     .foregroundColor(.gray)
                 
-                Text(description)
+                Text(game.shortDescription)
                     .font(.system(size: 12))
                     .foregroundColor(.gray)
                     .lineLimit(3)
@@ -47,5 +45,8 @@ struct BannerView: View {
         .clipShape(RoundedRectangle(cornerRadius: 15))
         .shadow(color: Color.black.opacity(0.3), radius: 5, x: 5, y: 5)
         .padding(.horizontal, 5)
+        .onTapGesture {
+            onTapGame(game)
+        }
     }
 }

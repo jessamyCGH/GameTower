@@ -23,10 +23,10 @@ class SearchViewViewModel: ObservableObject {
         self.context = context
         fetchStoredGames()
     }
-        
+    
     func fetchStoredGames() {
         let fetchRequest = NSFetchRequest<VideoGameEntity>(entityName: "VideoGameEntity")
-
+        
         do {
             let storedGames = try context.fetch(fetchRequest)
             allGames = storedGames.map { entity in
@@ -48,6 +48,11 @@ class SearchViewViewModel: ObservableObject {
         } catch {
             print("Error al recuperar juegos de Core Data: \(error)")
         }
+    }
+    
+    func handleGameTap(game: VideoGame, coordinator: AppCoordinator) {
+        coordinator.showVideoGameDetailView(game: game)
+        
     }
     
     func filterGames() {

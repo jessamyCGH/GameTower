@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GameCardView: View {
     let game: VideoGame
+    let onTapView: (_ game: VideoGame) -> Void
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -40,5 +41,8 @@ struct GameCardView: View {
         .padding()
         .background(RoundedRectangle(cornerRadius: 10).fill(Color.white).shadow(radius: 5))
         .padding(.horizontal)
+        .onTapGesture {
+            onTapView(game)
+        }
     }
 }

@@ -11,7 +11,7 @@ import SwiftUI
 struct CategoryView: View {
     var category: String
     var onSelect: (String) -> Void
-
+    
     var body: some View {
         Text(category)
             .frame(width: 120, height: 100)

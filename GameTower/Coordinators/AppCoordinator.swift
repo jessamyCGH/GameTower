@@ -12,13 +12,13 @@ import CoreData
 class AppCoordinator: ObservableObject {
     @Published var rootView: AnyView
     private let context: NSManagedObjectContext
-
+    
     init(context: NSManagedObjectContext) {
         self.context = context
-        self.rootView = AnyView(EmptyView()) 
+        self.rootView = AnyView(EmptyView())
         setupRootView()
     }
-
+    
     private func setupRootView() {
         rootView = AnyView(VideoGameListView(context: context).environmentObject(self))
     }
@@ -29,6 +29,9 @@ class AppCoordinator: ObservableObject {
     
     func showSearchView() {
         rootView = AnyView(SearchView(context: context).environmentObject(self))
-       
+    }
+    
+    func showVideoGameDetailView(game: VideoGame) {
+        rootView = AnyView(VideoGameDetailView(game: game))
     }
 }

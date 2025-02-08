@@ -11,7 +11,7 @@ import SwiftUI
 struct PlatformView: View {
     var platform: String
     var onSelect: (String) -> Void
-
+    
     var body: some View {
         Text(platform)
             .frame(width: 120, height: 100)

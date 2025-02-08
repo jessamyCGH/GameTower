@@ -10,7 +10,7 @@ import SwiftUI
 struct CategoryTagView: View {
     var genre: String
     var onRemove: () -> Void
-
+    
     var body: some View {
         HStack {
             Text(genre)

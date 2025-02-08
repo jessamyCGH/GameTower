@@ -53,7 +53,9 @@ struct SearchView: View {
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 16) {
                     ForEach(viewModel.videoGames, id: \ .id) { game in
-                        GameCardView(game: game)
+                        GameCardView(game: game) { gameSelected in
+                            viewModel.handleGameTap(game: gameSelected, coordinator: coordinator)
+                        }
                     }
                 }
                 .padding()

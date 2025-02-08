@@ -10,12 +10,12 @@ import SwiftUI
 struct CategoryGridView: View {
     @ObservedObject var viewModel: VideoGameViewModel
     let categories: [String]
-
+    
     let columns = [
         GridItem(.flexible(), spacing: 15),
         GridItem(.flexible(), spacing: 15)
     ]
-
+    
     var body: some View {
         LazyVGrid(columns: columns, spacing: 15) {
             ForEach(categories, id: \.self) { category in
