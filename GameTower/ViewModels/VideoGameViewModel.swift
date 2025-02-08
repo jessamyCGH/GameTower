@@ -20,6 +20,7 @@ class VideoGameViewModel: ObservableObject {
     @Published var filteredGamesByPlatform: [VideoGame] = []
     
     
+    
     private let context: NSManagedObjectContext
     private let service: VideoGameServiceProtocol
     private var cancellables = Set<AnyCancellable>()
@@ -74,6 +75,16 @@ class VideoGameViewModel: ObservableObject {
     }
     
     private func saveGamesToCoreData(_ games: [VideoGame]) {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "VideoGameEntity")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(deleteRequest)
+            try context.save()
+        } catch {
+            print("Error al eliminar los juegos almacenados: \(error)")
+        }
+        
         for game in games {
             let entity = NSEntityDescription.entity(forEntityName: "VideoGameEntity", in: context)!
             let videoGame = NSManagedObject(entity: entity, insertInto: context)

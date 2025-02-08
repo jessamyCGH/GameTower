@@ -11,14 +11,34 @@ import CoreData
 struct VideoGameListView: View {
     @StateObject private var viewModel: VideoGameViewModel
     @State private var carouselIndex = 0
+    @EnvironmentObject var coordinator: AppCoordinator
     
     init(context: NSManagedObjectContext) {
+        
         _viewModel = StateObject(wrappedValue: VideoGameViewModel(context: context))
     }
     
     var body: some View {
         NavigationView {
             ScrollView{
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                    
+                    Text("Buscar")
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .frame(maxWidth: .infinity)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    coordinator.showSearchView()
+                }
+                .padding(12)
+                .background(Color(.systemGray5))
+                .cornerRadius(10)
+                .padding(.horizontal)
+                
                 Text("Destacados y recomendados")
                     .frame(maxWidth: .infinity,  alignment: .leading)
                     .font(.system(size: 20, weight: .bold))
